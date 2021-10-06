@@ -51,14 +51,16 @@ void main() {
       'should call the InputConverter to validate and convert the string to the an unsigned integer',
       build: () {
         setUpMockInputConverterSuccess();
+        when(mockGetConcreteNumberTrivia(any))
+            .thenAnswer((_) async => Right(tNumberTrivia));
         return bloc;
       },
-      act: (bloc) {
+      act: (bloc) async {
         bloc.add(GetTriviaForConcreteNumber(tNumberString));
-      },
-      verify: (_) async {
         await untilCalled(
             mockInputConverter.stringToUnsignedInteger(tNumberString));
+      },
+      verify: (_) {
         verify(mockInputConverter.stringToUnsignedInteger(tNumberString));
       },
     );

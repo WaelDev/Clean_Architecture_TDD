@@ -17,7 +17,8 @@ late MockSharedPreferences mockSharedPreferences;
 main() {
   setUp(() async {
     mockSharedPreferences = MockSharedPreferences();
-    dataSource = NumberTriviaLocalDataSourceImpl(mockSharedPreferences);
+    dataSource = NumberTriviaLocalDataSourceImpl(
+        sharedPreferences: mockSharedPreferences);
   });
 
   group('getLastNumberTrivia', () {
