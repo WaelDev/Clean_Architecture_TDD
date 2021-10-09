@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/network/network_info.dart';
 import 'core/util/input_converter.dart';
 import 'features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
@@ -26,6 +27,13 @@ Future<void> setUp() async {
     ),
   );
 
+  // sl.registerFactory<NumberTriviaBloc>(
+  //   () => NumberTriviaBloc(
+  //     concrete: sl<UseCase<NumberTrivia, Params>>(),
+  //     inputConverter: sl<InputConverter>(),
+  //     random: sl<UseCase<NumberTrivia, NoParams>>(),
+  //   ),
+  // );
   // Use cases
   sl.registerLazySingleton(() => GetConcreteNumberTrivia(sl()));
   sl.registerLazySingleton(() => GetRandomNumberTrivia(sl()));
@@ -50,10 +58,11 @@ Future<void> setUp() async {
 
   //! Core
   sl.registerLazySingleton(() => InputConverter());
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton(() => http.Client);
+  sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => DataConnectionChecker());
 }
